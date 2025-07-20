@@ -6,7 +6,7 @@ namespace RentCarServer.Application.Extensions;
 
 public static class RegisterServicesExtension
 {
-    public static IServiceCollection RegisterServices(this IServiceCollection services)
+    public static IServiceCollection AddApplication(this IServiceCollection services)
     {
         services.AddMediatR(cnf =>
         {

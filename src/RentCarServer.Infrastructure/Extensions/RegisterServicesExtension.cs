@@ -9,12 +9,12 @@ namespace RentCarServer.Infrastructure.Extensions;
 public static class RegisterServicesExtension
 {
     public static IServiceCollection AddInfrastructure(
-        this ServiceCollection services,
+        this IServiceCollection services,
         IConfiguration configuration)
     {
         services.AddDbContext<ApplicationDbContext>(opt =>
         {
-            opt.UseSqlServer(configuration.GetConnectionString("DefulatConnection")!);
+            opt.UseSqlServer(configuration.GetConnectionString("DefaultConnection")!);
         }); 
 
         services.Scan(action => action
