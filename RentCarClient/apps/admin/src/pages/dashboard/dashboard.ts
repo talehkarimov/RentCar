@@ -9,7 +9,6 @@ import { BreadcrumbService } from '../../services/breadcrumb';
 })
 export default class Dashboard implements OnInit {
   readonly #breadCrumb = inject(BreadcrumbService);
-
   ngOnInit(): void {
     this.#breadCrumb.setDashboard();
   }
