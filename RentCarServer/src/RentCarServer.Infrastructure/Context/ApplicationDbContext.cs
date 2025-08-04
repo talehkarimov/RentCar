@@ -1,16 +1,20 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using GenericRepository;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using RentCarServer.Domain.Abstractions;
+using RentCarServer.Domain.Users;
 using RentCarServer.Infrastructure.Converters;
 using System.Security.Claims;
 
 namespace RentCarServer.Infrastructure.Context;
 
-internal sealed class ApplicationDbContext : DbContext
+internal sealed class ApplicationDbContext : DbContext, IUnitOfWork
 {
     public ApplicationDbContext(DbContextOptions options) : base(options)
     {
     }
+
+    public DbSet<User> Users { get; set; }
 
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
