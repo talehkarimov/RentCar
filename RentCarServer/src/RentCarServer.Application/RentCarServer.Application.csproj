@@ -12,6 +12,11 @@
     <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.0.0" />
     <PackageReference Include="Mapster" Version="7.4.0" />
     <PackageReference Include="MediatR" Version="13.0.0" />
+    <PackageReference Include="TS.Result" Version="8.0.13" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\RentCarServer.Domain\RentCarServer.Domain.csproj" />
   </ItemGroup>
 
 </Project>

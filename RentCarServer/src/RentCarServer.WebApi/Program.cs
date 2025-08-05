@@ -4,6 +4,9 @@ using RentCarServer.Application.Extensions;
 using RentCarServer.Infrastructure.Extensions;
 using System.Threading.RateLimiting;
 using Microsoft.OpenApi.Models;
+using RentCarServer.WebApi.Extensions;
+using RentCarServer.WebApi.Modules;
+using RentCarServer.WebApi.Utilities;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -44,6 +47,8 @@ builder.Services.AddSwaggerGen(options =>
         Description = "RentCar project example"
     });
 });
+builder.Services.AddExceptionHandler<ExceptionHandler>().AddProblemDetails();
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -63,10 +68,10 @@ app.UseCors(x =>
     .AllowAnyMethod()
     .SetPreflightMaxAge(TimeSpan.FromMinutes(10))
 );
-
+app.UseExceptionHandler();
 app.UseAuthentication();
 app.UseAuthorization();
-
 app.MapControllers().RequireRateLimiting("fixed");
+app.MapAuthEndpoint();
 
 app.Run();

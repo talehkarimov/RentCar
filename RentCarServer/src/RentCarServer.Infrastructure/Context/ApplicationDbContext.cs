@@ -21,8 +21,7 @@ internal sealed class ApplicationDbContext : DbContext, IUnitOfWork
         var entries = ChangeTracker.Entries<Entity>();
 
         HttpContextAccessor httpContextAccessor = new();
-        string userIdString =
-            httpContextAccessor
+        string userIdString = httpContextAccessor
             .HttpContext!
             .User
             .Claims

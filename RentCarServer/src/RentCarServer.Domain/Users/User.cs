@@ -18,16 +18,16 @@ public sealed class User : Entity
     {
         FirstName = firstName;
         LastName = lastName;
-        FullName = new ($"{FirstName.Value} {LastName.Value} ({Email.Value})");
         Email = email;
+        FullName = new(FirstName.Value + " " + LastName.Value + " (" + Email.Value + ")");
         UserName = userName;
         Password = password;
     }
 
     public FirstName FirstName { get; private set; } = default!;
     public LastName LastName { get; private set; } = default!;
-    public FullName FullName { get; private set; } = default!;
     public Email Email { get; private set; } = default!;
+    public FullName FullName { get; private set; } = default!;
     public Username UserName { get; private set; } = default!;
     public Password Password { get; private set; } = default!;
 
