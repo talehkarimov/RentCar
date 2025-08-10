@@ -25,6 +25,17 @@ builder.Services.AddRateLimiter(cnf =>
     });
 });
 
+builder.Services.AddRateLimiter(cnf =>
+{
+    cnf.AddFixedWindowLimiter("login-fixed", opt =>
+    {
+        opt.PermitLimit = 5;
+        opt.QueueLimit = 1;
+        opt.Window = TimeSpan.FromMinutes(1);
+        opt.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
+    });
+});
+
 builder.Services
     .AddControllers()
     .AddOData(opt => opt.Select()
@@ -34,6 +45,11 @@ builder.Services
         .OrderBy()
         .SetMaxTop(null)
 );
+
+builder.Services.AddResponseCompression(options =>
+{
+    options.EnableForHttps = true;
+});
 
 builder.Services.AddCors();
 
@@ -46,6 +62,31 @@ builder.Services.AddSwaggerGen(options =>
         Version = "v1",
         Description = "RentCar project example"
     });
+
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http,
+        Scheme = "Bearer",
+        BearerFormat = "JWT",
+        In = ParameterLocation.Header,
+        Description = "Enter your token in the text input below(Bearer will be added automatically). Example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'",
+    });
+
+    options.AddSecurityRequirement(new OpenApiSecurityRequirement
+        {
+            {
+                new OpenApiSecurityScheme
+                {
+                    Reference = new OpenApiReference
+                    {
+                        Type = ReferenceType.SecurityScheme,
+                        Id = "Bearer"
+                    }
+                },
+                new string[] {}
+            }
+        });
 });
 builder.Services.AddExceptionHandler<ExceptionHandler>().AddProblemDetails();
 
@@ -68,10 +109,12 @@ app.UseCors(x =>
     .AllowAnyMethod()
     .SetPreflightMaxAge(TimeSpan.FromMinutes(10))
 );
-app.UseExceptionHandler();
+app.UseResponseCompression();
 app.UseAuthentication();
 app.UseAuthorization();
-app.MapControllers().RequireRateLimiting("fixed");
+app.UseRateLimiter();
+app.UseExceptionHandler();
+app.MapControllers().RequireAuthorization().RequireRateLimiting("fixed");
 app.MapAuthEndpoint();
 
 app.Run();

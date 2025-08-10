@@ -21,6 +21,13 @@ public static class RegisterServicesExtension
 
         services.AddScoped<IUnitOfWork>(srv => srv.GetRequiredService<ApplicationDbContext>());
 
+        services.Configure<JwtOptions>(configuration.GetSection("Jwt"));
+        services.ConfigureOptions<JwtSetupOptions>();
+
+        services.AddAuthentication().AddJwtBearer();
+        services.AddAuthorization();
+
+
         services.Scan(action => action
             .FromAssemblies(typeof(RegisterServicesExtension).Assembly)
             .AddClasses(publicOnly: false)
@@ -29,8 +36,7 @@ public static class RegisterServicesExtension
             .WithScopedLifetime()
         );
 
-        services.Configure<JwtOptions>(configuration.GetSection("Jwt"));
-
+        
         return services;
     }
 }
