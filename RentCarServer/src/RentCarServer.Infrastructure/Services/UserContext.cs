@@ -11,6 +11,7 @@ internal sealed class UserContext(
     public Guid GetUserId()
     {
         var httpContext = httpContextAccessor.HttpContext;
+        if (httpContext is null) throw new Exception("Context not found!");
         var claims = httpContext.User.Claims;
         string? userId = claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value;
         if (userId is null) throw new ArgumentException("User not found!");

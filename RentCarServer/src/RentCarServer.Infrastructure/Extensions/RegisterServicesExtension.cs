@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using RentCarServer.Infrastructure.Context;
+using RentCarServer.Infrastructure.Options;
 using Scrutor;
 
 namespace RentCarServer.Infrastructure.Extensions;
@@ -27,6 +28,8 @@ public static class RegisterServicesExtension
             .AsImplementedInterfaces()
             .WithScopedLifetime()
         );
+
+        services.Configure<JwtOptions>(configuration.GetSection("Jwt"));
 
         return services;
     }
